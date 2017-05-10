@@ -1,0 +1,38 @@
+{
+  "name": "hapi-sequelize-wrapper",
+  "version": "0.0.1",
+  "description": "hapi sequelize wrapper plugin",
+  "main": "lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "posttest": "echo drop database test_db | psql -U postgres",
+    "test": "lab -a code -v -t 95 -L"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/simon-p-r/hapi-sequelize-wrapper.git"
+  },
+  "keywords": [
+    "sequelize",
+    "hapi",
+    "plugin"
+  ],
+  "author": "simon-p-r",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/simon-p-r/hapi-sequelize-wrapper/issues"
+  },
+  "homepage": "https://github.com/simon-p-r/hapi-sequelize-wrapper#readme",
+  "dependencies": {
+    "sequelize-wrapper": "0.0.4"
+  },
+  "devDependencies": {
+    "code": "^4.0.0",
+    "coveralls": "^2.13.1",
+    "hapi": "^16.1.1",
+    "hoek": "^4.1.1",
+    "lab": "^13.0.4"
+  }
+}
