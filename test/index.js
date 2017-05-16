@@ -326,11 +326,61 @@ describe('Plugin', () => {
 
                 // TODO fix problem with deleting all not returning
                 expect(res.statusCode).to.equal(200);
-                expect(res.result.deleted).to.exist();
+                expect(res.result.status).to.equal('ok');
                 server.stop(done);
             });
         });
     });
+
+    it('should get all database names', (done) => {
+
+        Server.start(Config, (err, server) => {
+
+            expect(err).to.not.exist();
+            expect(server).to.exist();
+
+            server.inject('/ds/database/names', (res) => {
+
+                // TODO fix problem with deleting all not returning
+                expect(res.statusCode).to.equal(200);
+                expect(res.result).to.be.an.array().and.have.length(1);
+                server.stop(done);
+            });
+        });
+    });
+
+    it('should get all table names for associated database', (done) => {
+
+        Server.start(Config, (err, server) => {
+
+            expect(err).to.not.exist();
+            expect(server).to.exist();
+
+            server.inject('/ds/database/test_db/tables', (res) => {
+
+                expect(res.statusCode).to.equal(200);
+                expect(res.result).to.be.an.array().and.have.length(1);
+                server.stop(done);
+            });
+        });
+    });
+
+    it('should get a table schema', (done) => {
+
+        Server.start(Config, (err, server) => {
+
+            expect(err).to.not.exist();
+            expect(server).to.exist();
+
+            server.inject('/ds/database/test_db/supplier', (res) => {
+
+                expect(res.statusCode).to.equal(200);
+                expect(res.result).to.be.an.object();
+                server.stop(done);
+            });
+        });
+    });
+
 
 });
 
