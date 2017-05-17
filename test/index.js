@@ -23,7 +23,7 @@ describe('Plugin', () => {
     const dbName = 'test_db';
     const tableName = 'supplier';
 
-    it('should return an error when invlaid options are passed to sequelize-wrapper module', (done) => {
+    it('should return an error when invalid options are passed to sequelize-wrapper module', (done) => {
 
         const invalid = Hoek.clone(Config);
         invalid.plugin.dbOpts.invalidKey = 'invalidValue';
