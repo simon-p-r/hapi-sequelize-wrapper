@@ -23,6 +23,19 @@ describe('Plugin', () => {
     const dbName = 'test_db';
     const tableName = 'supplier';
 
+    it('should return an error when invlaid options are passed to sequelize-wrapper module', (done) => {
+
+        const invalid = Hoek.clone(Config);
+        invalid.plugin.dbOpts.invalidKey = 'invalidValue';
+        Server.start(invalid, (err, server) => {
+
+            expect(err).to.exist();
+            expect(server).to.not.exist();
+            done();
+
+        });
+    });
+
     it('should return an error when it fails to connect to database due to invalid port', (done) => {
 
         const invalid = Hoek.clone(Config);
