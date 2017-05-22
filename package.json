@@ -1,6 +1,6 @@
 {
   "name": "hapi-sequelize-wrapper",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "hapi sequelize wrapper plugin",
   "main": "lib/index.js",
   "directories": {
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "posttest": "echo drop database test_db | psql -U postgres",
-    "test": "lab -a code -v -t 95 -L"
+    "test": "lab -a code -v -t 90 -L -I @@any-promise/REGISTRATION"
   },
   "repository": {
     "type": "git",
@@ -26,13 +26,16 @@
   },
   "homepage": "https://github.com/simon-p-r/hapi-sequelize-wrapper#readme",
   "dependencies": {
-    "sequelize-wrapper": "0.0.8"
+    "fast-csv": "^2.4.0",
+    "sequelize-wrapper": "^0.1.0"
   },
   "devDependencies": {
     "code": "^4.0.0",
     "coveralls": "^2.13.1",
+    "form-data": "^2.1.4",
     "hapi": "^16.1.1",
     "hoek": "^4.1.1",
-    "lab": "^13.1.0"
+    "lab": "^13.1.0",
+    "stream-to-promise": "^2.2.0"
   }
 }

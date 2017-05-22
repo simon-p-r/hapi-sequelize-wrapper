@@ -1,19 +1,26 @@
 'use strict';
 
 const Code = require('code');
+const FormData = require('form-data');
+const Fs = require('fs');
 const Hoek = require('hoek');
 const Lab = require('lab');
+const Path = require('path');
+const StreamToPromise = require('stream-to-promise');
+
 
 const Server = require('./server');
 
 // Fixtures
+const Blank = Path.resolve(__dirname, './fixtures/blank.csv');
 const Config = require('./config');
+const Supplier = Path.resolve(__dirname, './fixtures/supplier.csv');
+
 
 // Set-up lab
 const lab = exports.lab = Lab.script();
 const describe = lab.describe;
 const it = lab.it;
-// const beforeEach = lab.beforeEach;
 const expect = Code.expect;
 
 
@@ -412,6 +419,94 @@ describe('Plugin', () => {
                 expect(res.statusCode).to.equal(200);
                 expect(res.result).to.be.an.object();
                 server.stop(done);
+            });
+        });
+    });
+
+
+    it('should fail to upload a csv file due to invalid payload', (done) => {
+
+        Server.start(Config, (err, server) => {
+
+            expect(err).to.not.exist();
+            expect(server).to.exist();
+
+            const form = new FormData();
+            form.append('file', Fs.createReadStream(Supplier));
+
+            StreamToPromise(form).then((payload) => {
+
+                const req = {
+                    method: 'POST',
+                    url: '/ds/test_db/supplier/upload',
+                    headers: form.getHeaders(),
+                    payload: null
+                };
+
+                server.inject(req, (res) => {
+
+                    expect(res.statusCode).to.equal(400);
+                    expect(res.result).to.be.an.object();
+                    expect(res.result.error).to.equal('Bad Request');
+                    server.stop(done);
+                });
+            });
+        });
+    });
+
+    it('should fail to upload a csv file due to invalid csv file', (done) => {
+
+        Server.start(Config, (err, server) => {
+
+            expect(err).to.not.exist();
+            expect(server).to.exist();
+
+            const form = new FormData();
+            form.append('file', Fs.createReadStream(Blank));
+
+            StreamToPromise(form).then((payload) => {
+
+                const req = {
+                    method: 'POST',
+                    url: '/ds/test_db/supplier/upload',
+                    headers: form.getHeaders(),
+                    payload
+                };
+
+                server.inject(req, (res) => {
+
+                    expect(res.statusCode).to.equal(422);
+                    expect(res.result.error).to.equal('Unprocessable Entity');
+                    server.stop(done);
+                });
+            });
+        });
+    });
+
+    it('should successfully upload a csv file', (done) => {
+
+        Server.start(Config, (err, server) => {
+
+            expect(err).to.not.exist();
+            expect(server).to.exist();
+
+            const form = new FormData();
+            form.append('file', Fs.createReadStream(Supplier));
+
+            StreamToPromise(form).then((payload) => {
+
+                const req = {
+                    method: 'POST',
+                    url: '/ds/test_db/supplier/upload',
+                    headers: form.getHeaders(),
+                    payload
+                };
+
+                server.inject(req, (res) => {
+
+                    expect(res.statusCode).to.equal(200);
+                    server.stop(done);
+                });
             });
         });
     });
