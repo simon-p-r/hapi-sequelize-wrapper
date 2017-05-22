@@ -181,6 +181,28 @@ describe('Plugin', () => {
         });
     });
 
+    it('should fail insertMany due to duplicate payload', (done) => {
+
+        Server.start(Config, (err, server) => {
+
+            expect(err).to.not.exist();
+            expect(server).to.exist();
+            const req = {
+                method: 'POST',
+                url: `/ds/${dbName}/${tableName}/batch`,
+                payload: Config.records
+            };
+
+            server.inject(req, (res) => {
+
+                expect(res.statusCode).to.equal(409);
+                expect(res.result.message).to.equal(`Error inserting record into database name "${dbName}" table name "${tableName}" due to duplicate key`);
+                server.stop(done);
+            });
+        });
+    });
+
+
     it('should fail to find due to invalid database name', (done) => {
 
         Server.start(Config, (err, server) => {
