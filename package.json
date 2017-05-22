@@ -1,6 +1,6 @@
 {
   "name": "hapi-sequelize-wrapper",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "hapi sequelize wrapper plugin",
   "main": "lib/index.js",
   "directories": {
